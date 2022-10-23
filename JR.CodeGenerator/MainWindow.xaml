@@ -1,0 +1,188 @@
+﻿<Window
+    x:Class="JR.CodeGenerator.MainViwsModwl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:JR.CodeGenerator"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="JR SQL To Code"
+    Width="924"
+    Height="672"
+    Background="Gray"
+    DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
+    mc:Ignorable="d">
+
+    <Grid Margin="5">
+        <Grid.Resources>
+            <Style TargetType="Border">
+                <Setter Property="Padding" Value="5,5,5,5" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="Padding" Value="5,5,5,5" />
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width=".5*" />
+            </Grid.ColumnDefinitions>
+
+            <GroupBox Grid.Column="0" Header="Conexion">
+                <Grid Margin="5">
+                    <Grid.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="Padding" Value="5,5,5,5" />
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="Servidor" />
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="0,3,0,3"
+                        Text="" />
+
+
+                    <CheckBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="0,3,0,3"
+                        Content="Seguridad integrada?"
+                        IsChecked="{Binding IsIntegrateSecurity}" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="Usuario" />
+                    <TextBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="0,3,0,3"
+                        IsEnabled="{Binding IsEnableUderPass}"
+                        Text="" />
+
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="Password" />
+                    <TextBox
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="0,3,0,3"
+                        IsEnabled="{Binding IsEnableUderPass}"
+                        Text="" />
+                    <Button Grid.Row="4" Grid.Column="1">Conectar</Button>
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="Base de Datos" />
+                    <TextBox
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Margin="0,3,0,3"
+                        Text="" />
+
+
+
+                </Grid>
+            </GroupBox>
+
+            <GroupBox
+                Grid.Column="1"
+                Margin="3,0"
+                Header="Configuracion">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="Empresa" />
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="0,3,0,3"
+                        Text="" />
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="Autor" />
+                    <TextBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="0,3,0,3"
+                        Text="" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="NameSpace" />
+                    <TextBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="0,3,0,3"
+                        Text="" />
+
+                </Grid>
+            </GroupBox>
+
+            <Button
+                Grid.Column="2"
+                Height="40"
+                Margin="3,0"
+                VerticalAlignment="Bottom">
+                Generar
+            </Button>
+
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+        </Grid>
+    </Grid>
+</Window>
