@@ -11,6 +11,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Globalization;
+using JR.CodeGenerator.Extensions;
+
 namespace JR.CodeGenerator.Services
 {
     /// <summary>
@@ -67,7 +69,7 @@ namespace JR.CodeGenerator.Services
                     // result += "\t\t ///</summary> " + into;
                     result += " </summary> " + into;
 
-                    string campo = toTitleCase ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(item.Column_Name) : item.Column_Name;
+                    string campo = toTitleCase ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(item.Column_Name) : item.Column_Name.UpperFirstChar();
 
                     result += $"\t\tpublic {clsSQLToCsharp.SQLToCsharp(item.Data_Type)} {campo} ";
                     
