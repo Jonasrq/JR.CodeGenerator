@@ -261,6 +261,39 @@
                         Text="{Binding PathCode, StringFormat='El codigo se gererará en: {0}'}"
                         TextWrapping="WrapWithOverflow" />
 
+                    <ScrollViewer Grid.Row="1" Background="#1e1e1e">
+                        <ListView Background="#1e1e1e" ItemsSource="{Binding Logs}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock
+                                            Background="LightYellow"
+                                            Foreground="#6a6a5f"
+                                            Text="{Binding TableVista}" />
+                                        <TextBlock Foreground="{Binding Status}" Text="{Binding TableName, StringFormat=': {0}'}" />
+                                        <TextBlock Foreground="{Binding Status}" Text="{Binding ErrorMessage, StringFormat=': {0}'}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+
+                            <!--<GridView>
+                                    <GridViewColumn Header="Log Message">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+
+                                                <TextBlock  Background="LightYellow"
+                                                        Foreground="#6a6a5f"
+                                                        Text="{Binding TableVista}" />
+                                                <TextBlock  Foreground="{Binding Path=Status}" Text="{Binding TableName}"  />
+
+
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.ItemTemplate>-->
+                        </ListView>
+                    </ScrollViewer>
 
                 </Grid>
             </Grid>

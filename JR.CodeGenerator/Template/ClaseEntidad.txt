@@ -2,7 +2,7 @@
 namespace $EspacioNombre$
 {
     /// <summary>
-    /// Estructura de la Tabla: $TableName$ 
+    /// Estructura de la $TablaVista$: $TableName$ 
 	/// Empresa: #Empresa#
 	/// Autor: #Autor#
 	/// Fecha: #Fecha#
