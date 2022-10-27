@@ -1,18 +1,18 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+Genera clases de entitty o models a partir de tu base de datos, solo necesitas los datos de conexion a tu servidor sql server
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+1.	Clone el repo
+2.	Ejecute el proyecto
+3.	Click en conectar
+4.	Elige la mase de datos a la que te quieres conectar
+5.  Seleccione las tablas y/o vistas
+6.  Click en generar.
 
 # Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+Si quieres contribuir con este proyecto, bienvenidas tus ideas 
+
 
 If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
 - [ASP.NET Core](https://github.com/aspnet/Home)
