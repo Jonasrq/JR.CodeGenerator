@@ -6,6 +6,7 @@
 		<Nullable>disable</Nullable>
 		<UseWPF>true</UseWPF>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<ApplicationIcon>Images\database.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -13,6 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="Images\database.ico" />
 		<None Remove="Images\database.png" />
 		<None Remove="Images\folder.png" />
 		<None Remove="Images\table.png" />
@@ -20,7 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Images\database.png">
+		<Content Include="Images\database.ico">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Images\folder.png">
@@ -32,6 +34,10 @@
 		<Content Include="Images\view.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Images\database.ico" />
 	</ItemGroup>
 
 	<ItemGroup>

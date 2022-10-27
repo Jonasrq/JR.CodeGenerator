@@ -22,7 +22,8 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ConctDBCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateCommand))]
-    string serverName = "localhost";
+    string serverName =  "localhost";
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEnableUderPass))]
     [NotifyCanExecuteChangedFor(nameof(GenerateCommand))]
@@ -36,13 +37,28 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GenerateCommand))]
+#if debug
     string empresa = "Grupo Cercasa";
+#else
+    string empresa;
+#endif
+
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GenerateCommand))]
-    string autor = "Jonás Requena";
+#if debug
+    string autor =   "Jonás Requena";
+#else
+    string autor;
+#endif
+
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GenerateCommand))]
-    string nameSpace = "PruebaInicial";
+#if debug
+    string nameSpace =  "PruebaInicial";
+#else
+    string nameSpace;
+#endif
+
     [ObservableProperty]
     bool toTitleCase = false;
 
