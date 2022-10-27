@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:JR.CodeGenerator"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:JR.CodeGenerator.Models"
     Title="JR SQL To Code"
     Width="924"
     Height="672"
@@ -23,7 +24,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" Margin="0,0,0,5">
             <Grid.Resources>
                 <Style TargetType="Border">
                     <Setter Property="Padding" Value="5,5,5,5" />
@@ -59,12 +60,12 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         HorizontalAlignment="Right"
-                        Content="Servidor" />
+                        Content="Server name" />
                     <TextBox
                         Grid.Row="0"
                         Grid.Column="1"
                         Margin="0,3,0,3"
-                        Text="" />
+                        Text="{Binding ServerName}" />
 
 
                     <CheckBox
@@ -78,13 +79,13 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         HorizontalAlignment="Right"
-                        Content="Usuario" />
+                        Content="User Name" />
                     <TextBox
                         Grid.Row="2"
                         Grid.Column="1"
                         Margin="0,3,0,3"
                         IsEnabled="{Binding IsEnableUderPass}"
-                        Text="" />
+                        Text="{Binding UserName}" />
 
                     <Label
                         Grid.Row="3"
@@ -96,18 +97,27 @@
                         Grid.Column="1"
                         Margin="0,3,0,3"
                         IsEnabled="{Binding IsEnableUderPass}"
-                        Text="" />
-                    <Button Grid.Row="4" Grid.Column="1">Conectar</Button>
+                        Text="{Binding Password}" />
+                    <Button
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Command="{Binding ConctDBCommand}">
+                        Conectar
+                    </Button>
+
                     <Label
                         Grid.Row="5"
                         Grid.Column="0"
                         HorizontalAlignment="Right"
                         Content="Base de Datos" />
-                    <TextBox
+                    <ComboBox
                         Grid.Row="5"
                         Grid.Column="1"
                         Margin="0,3,0,3"
-                        Text="" />
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding DataBases}"
+                        SelectedItem="{Binding SelectdataBases}"
+                        SelectedValuePath="Id" />
 
 
 
@@ -141,7 +151,7 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Margin="0,3,0,3"
-                        Text="" />
+                        Text="{Binding Empresa}" />
 
                     <Label
                         Grid.Row="1"
@@ -152,7 +162,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Margin="0,3,0,3"
-                        Text="" />
+                        Text="{Binding Autor}" />
 
                     <Label
                         Grid.Row="2"
@@ -163,7 +173,20 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         Margin="0,3,0,3"
-                        Text="" />
+                        Text="{Binding NameSpace}" />
+
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="ToTitleCase?"
+                        ToolTip="Nomde de Campos" />
+                    <CheckBox
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="0,3,0,3"
+                        IsChecked="{Binding ToTitleCase}"
+                        ToolTip="Nomde de Campos" />
 
                 </Grid>
             </GroupBox>
@@ -172,9 +195,11 @@
                 Grid.Column="2"
                 Height="40"
                 Margin="3,0"
-                VerticalAlignment="Bottom">
-                Generar
-            </Button>
+                VerticalAlignment="Bottom"
+                Command="{Binding GenerateCommand}"
+                Content="Generar Code" />
+
+
 
         </Grid>
 
@@ -183,6 +208,63 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Padding="5,8"
+                        Background="AliceBlue"
+                        Text="Tablas y Vistas" />
+
+                    <TreeView
+                        Grid.Row="1"
+                        Margin="0"
+                        Padding="0"
+                        ItemsSource="{Binding DataTables}">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+
+                                <CheckBox IsChecked="{Binding IsSelected}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image
+                                            Width="16"
+                                            Height="16"
+                                            Margin="0,0,3,0"
+                                            Source="{Binding ImageUri}" />
+                                        <TextBlock Text="{Binding}" />
+                                    </StackPanel>
+                                </CheckBox>
+
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Padding="5,0"
+                        Background="AliceBlue"
+                        Text="{Binding PathCode, StringFormat='El codigo se gererará en: {0}'}"
+                        TextWrapping="WrapWithOverflow" />
+
+
+                </Grid>
+            </Grid>
+
         </Grid>
     </Grid>
 </Window>

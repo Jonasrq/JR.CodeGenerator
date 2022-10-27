@@ -15,5 +15,4 @@ public partial class MainViwsModwl : Window
     {
         InitializeComponent();
     }
-
 }
