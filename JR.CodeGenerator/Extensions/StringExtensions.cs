@@ -1,4 +1,6 @@
-﻿namespace JR.CodeGenerator.Extensions;
+﻿using System.Globalization;
+
+namespace JR.CodeGenerator.Extensions;
 
 /// <summary>
 /// Uppers the first character.
@@ -23,4 +25,16 @@ public static class StringExtensions
         chars[0] = char.ToUpper(chars[0]);
         return new string(chars);
     }
+
+    /// <summary>
+    /// Converts to titlecase.
+    /// </summary>
+    /// <param name="input">The input.</param>
+    /// <returns></returns>
+    public static string ToTitleCase(this string input)
+    {
+        return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input);
+    }
+
+        
 }

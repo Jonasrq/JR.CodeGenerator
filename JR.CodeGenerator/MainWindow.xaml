@@ -274,24 +274,7 @@
                                         <TextBlock Foreground="{Binding Status}" Text="{Binding ErrorMessage, StringFormat=': {0}'}" />
                                     </StackPanel>
                                 </DataTemplate>
-                            </ListView.ItemTemplate>
-
-                            <!--<GridView>
-                                    <GridViewColumn Header="Log Message">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-
-                                                <TextBlock  Background="LightYellow"
-                                                        Foreground="#6a6a5f"
-                                                        Text="{Binding TableVista}" />
-                                                <TextBlock  Foreground="{Binding Path=Status}" Text="{Binding TableName}"  />
-
-
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.ItemTemplate>-->
+                            </ListView.ItemTemplate>                          
                         </ListView>
                     </ScrollViewer>
 

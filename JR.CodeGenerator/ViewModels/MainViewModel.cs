@@ -273,11 +273,11 @@ public partial class MainViewModel : ObservableObject
     {
         get => new DataGeneral()
         {
-            Empresa = empresa,
-            Autor = autor,
-            NameSpace = nameSpace,
-            Path = pathCode,
-            ToTitleCase = toTitleCase
+            Empresa = Empresa,
+            Autor = Autor,
+            NameSpace = NameSpace,
+            Path = PathCode,
+            ToTitleCase = ToTitleCase
         };
     }
 

@@ -64,7 +64,7 @@ public class ClaseMetodos
                 // result += "\t\t ///</summary> " + into;
                 result += " </summary> " + into;
 
-                string campo = toTitleCase ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(item.Column_Name) : item.Column_Name.UpperFirstChar();
+                string campo = toTitleCase ? item.Column_Name.ToLower().ToTitleCase() : item.Column_Name.UpperFirstChar();
 
                 result += $"\t\tpublic {clsSQLToCsharp.SQLToCsharp(item.Data_Type)} {campo} ";
 
