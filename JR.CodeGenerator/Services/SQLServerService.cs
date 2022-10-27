@@ -1,4 +1,5 @@
-﻿using JR.CodeGenerator.Models;
+﻿using JR.CodeGenerator.Extensions;
+using JR.CodeGenerator.Models;
 
 using System.Data;
 using System.Data.SqlClient;
@@ -126,20 +127,20 @@ public class SQLServerService : ISQLServerService
         var createClass = new ClaseMetodos(GetConnectionString);
 
         string queryCampoosTabla = await ReadFile("InfoCamposTablas.txt");
-        queryCampoosTabla = queryCampoosTabla.Replace("$TableName$", general.TableName);
+        queryCampoosTabla = queryCampoosTabla.Replace("$TableName$", general.TableName.ToLower().ToTitleCase());
 
         string camposClessTemp = await createClass.GetCampos(queryCampoosTabla, general.ToTitleCase);
 
         string entityTemp = await ReadFile("ClaseEntidad.txt");
         entityTemp = entityTemp.Replace("$TablaVista$", general.TableVista)
-                                .Replace("$TableName$", general.TableName)
+                                .Replace("$TableName$", general.TableName.ToLower().ToTitleCase())
                                 .Replace("$EspacioNombre$", general.NameSpace);
         entityTemp = entityTemp.Replace("#Propiedades#", camposClessTemp)
                                .Replace("#Empresa#", general.Empresa)
                                .Replace("#Autor#", general.Autor)
                                .Replace("#Fecha#", DateTime.Now.ToString("dd/MM/yyyy"));
 
-        string pathClessEntity = System.IO.Path.Combine(general.FullPath, general.TableName + ".cs");
+        string pathClessEntity = System.IO.Path.Combine(general.FullPath, general.TableName.ToLower().ToTitleCase() + ".cs");
         await WriteFile(pathClessEntity, entityTemp);
     }
 
