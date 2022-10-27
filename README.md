@@ -2,6 +2,7 @@
 Genera clases de entitty o models a partir de tu base de datos, solo necesitas los datos de conexion a tu servidor sql server
 
 # Getting Started
+SDK .Net 6
 
 1.	Clone el repo
 2.	Ejecute el proyecto
