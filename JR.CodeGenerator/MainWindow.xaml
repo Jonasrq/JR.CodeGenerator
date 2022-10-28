@@ -14,6 +14,9 @@
     DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
     mc:Ignorable="d">
 
+
+
+
     <Grid Margin="5">
         <Grid.Resources>
             <Style TargetType="Border">
@@ -152,7 +155,7 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Margin="0,3,0,3"
-                        Text="{Binding Empresa}" />
+                        Text="{Binding Empresa, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label
                         Grid.Row="1"
@@ -163,7 +166,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Margin="0,3,0,3"
-                        Text="{Binding Autor}" />
+                        Text="{Binding Autor, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label
                         Grid.Row="2"
@@ -174,7 +177,7 @@
                         Grid.Row="2"
                         Grid.Column="1"
                         Margin="0,3,0,3"
-                        Text="{Binding NameSpace}" />
+                        Text="{Binding NameSpace, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label
                         Grid.Row="3"
@@ -213,15 +216,31 @@
             <Grid Grid.Column="0">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40" />
+                        <RowDefinition Height="60" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock
-                        Grid.Row="0"
-                        Padding="5,8"
-                        Background="AliceBlue"
-                        Text="Tablas y Vistas" />
+                    <Grid Grid.Row="0" Background="AliceBlue">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Grid.Row="0"
+                            Padding="5,3"
+                            Text="Tablas y Vistas" />
+                        <TextBox
+                            Grid.Row="1"
+                            Margin="5,0"
+                            IsEnabled="{Binding IsEnableBuscar}"
+                            Text="{Binding TextBuscar, UpdateSourceTrigger=PropertyChanged}" />
+
+                    </Grid>
+
+
+
 
                     <TreeView
                         Grid.Row="1"
@@ -251,7 +270,7 @@
             <Grid Grid.Column="1">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40" />
+                        <RowDefinition Height="60" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 

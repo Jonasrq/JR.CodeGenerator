@@ -107,7 +107,7 @@ public class SQLServerService : ISQLServerService
                 Name = item.Name,
                 ImageUri = item.ImageUri,
                 Schema = item.Schema,
-                Children = item.Children.OrderBy(x => x.Name).ToList()
+                Children = item.Children.OrderBy(x=>x.Schema).OrderBy(x => x.Name).ToList()
             });
         }
 
