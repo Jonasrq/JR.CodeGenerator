@@ -291,7 +291,7 @@
                                             Foreground="#6a6a5f"
                                             Text="{Binding TableVista}" />
                                         <TextBlock Foreground="{Binding Status}" Text="{Binding TableName, StringFormat=': {0}'}" />
-                                        <TextBlock Foreground="{Binding Status}" Text="{Binding ErrorMessage, StringFormat=': {0}'}" />
+                                        <TextBlock Foreground="{Binding Status}" Text="{Binding ErrorMessage, StringFormat='  : {0}'}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>

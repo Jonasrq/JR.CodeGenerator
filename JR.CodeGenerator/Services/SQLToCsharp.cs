@@ -24,12 +24,14 @@ public class clsSQLToCsharp
                 return "bool";
             case "char":
                 return "string";
+            case "datetime2":
+                return "DateTime";
             case "datetime":
                 return "DateTime";
             case "date":
-                return "TimeSpan";
-            case "time":
                 return "DateTime";
+            case "time":
+                return "TimeSpan";
             case "decimal":
                 return "decimal";
             case "float":
