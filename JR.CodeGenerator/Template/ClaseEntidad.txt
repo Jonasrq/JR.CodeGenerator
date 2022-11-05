@@ -1,14 +1,14 @@
-﻿using System;
-namespace $EspacioNombre$
+﻿
+namespace $EspacioNombre$;
+
+/// <summary>
+/// Estructura de la $TablaVista$: $TableName$ 
+/// Empresa: #Empresa#
+/// Autor: #Autor#
+/// Fecha: #Fecha#
+/// </summary>
+public class $TableName$ 
 {
-    /// <summary>
-    /// Estructura de la $TablaVista$: $TableName$ 
-	/// Empresa: #Empresa#
-	/// Autor: #Autor#
-	/// Fecha: #Fecha#
-    /// </summary>
-	public class $TableName$ 
-	{
-		#Propiedades#
-	}
+#Propiedades#
 }
+

@@ -3,6 +3,7 @@ using JR.CodeGenerator.Models;
 
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics.SymbolStore;
 using System.IO;
 using System.Text;
 
@@ -67,10 +68,10 @@ public class SQLServerService : ISQLServerService
         _dataConnection = dataConnection;
 
         List<TableView> list = new List<TableView>()
-    {
-       new TableView(){Name = "Tablas", ImageUri = "/Images/folder.png"},
-       new TableView(){Name = "Vistas", ImageUri = "/Images/folder.png"}
-    };
+        {
+           new TableView(){Name = "Tablas", ImageUri = "/Images/folder.png"},
+           new TableView(){Name = "Vistas", ImageUri = "/Images/folder.png"}
+        };
 
         using (var db = new SqlConnection(GetConnectionString))
         {
@@ -107,7 +108,7 @@ public class SQLServerService : ISQLServerService
                 Name = item.Name,
                 ImageUri = item.ImageUri,
                 Schema = item.Schema,
-                Children = item.Children.OrderBy(x=>x.Schema).OrderBy(x => x.Name).ToList()
+                Children = item.Children.OrderBy(x => x.Schema).OrderBy(x => x.Name).ToList()
             });
         }
 
@@ -125,23 +126,102 @@ public class SQLServerService : ISQLServerService
         _dataConnection = conct;
         _dataGeneral = general;
         var createClass = new ClaseMetodos(GetConnectionString);
+        string _tableNameClass = general.TableName.ToLower().ToTitleCase();
+
+
 
         string queryCampoosTabla = await ReadFile("InfoCamposTablas.txt");
-        queryCampoosTabla = queryCampoosTabla.Replace("$TableName$", general.TableName.ToLower().ToTitleCase());
+        queryCampoosTabla = queryCampoosTabla.Replace("$TableName$", _tableNameClass);
 
-        string camposClessTemp = await createClass.GetCampos(queryCampoosTabla, general.ToTitleCase);
+        string camposClessTemp = await createClass.GetFields(queryCampoosTabla, general.ToTitleCase);
 
         string entityTemp = await ReadFile("ClaseEntidad.txt");
         entityTemp = entityTemp.Replace("$TablaVista$", general.TableVista)
-                                .Replace("$TableName$", general.TableName.ToLower().ToTitleCase())
-                                .Replace("$EspacioNombre$", general.NameSpace);
+                               .Replace("$TableName$", _tableNameClass)
+                               .Replace("$EspacioNombre$", general.NameSpace);
         entityTemp = entityTemp.Replace("#Propiedades#", camposClessTemp)
                                .Replace("#Empresa#", general.Empresa)
                                .Replace("#Autor#", general.Autor)
                                .Replace("#Fecha#", DateTime.Now.ToString("dd/MM/yyyy"));
 
-        string pathClessEntity = System.IO.Path.Combine(general.FullPath, general.TableName.ToLower().ToTitleCase() + ".cs");
-        await WriteFile(pathClessEntity, entityTemp);
+        string pathCless = System.IO.Path.Combine(general.FullPath, _tableNameClass + ".cs");
+        await WriteFile(pathCless, entityTemp);
+
+
+        if (_dataGeneral.IsDapper)
+        {
+            string _templete = string.Empty;
+            string _templete2 = string.Empty;
+            _dataGeneral.TableVista = "Services";
+            _templete = await ReadFile("DapperServiceEntities.txt");
+            _templete = _templete.Replace("$EspacioNombre$", general.NameSpace)
+                                 .Replace("$TableName$", _tableNameClass);
+
+           
+            _templete2 = await createClass.GetFieldsInsert(queryCampoosTabla);         
+            _templete = _templete.Replace("$FieldssInsert$", _templete2);
+
+
+            _templete2 = await createClass.GetFieldsUpdate(queryCampoosTabla);
+            _templete = _templete.Replace("$FieldsUpdate$", _templete2);
+
+
+            _templete2 = await createClass.GetFieldsPrimaryKey(queryCampoosTabla);
+            _templete = _templete.Replace("$Clave_Primaria$", _templete2);
+
+
+            pathCless = System.IO.Path.Combine(general.FullPath, $"{_tableNameClass}Service.cs");
+
+            await WriteFile(pathCless, _templete);
+        }
+
+
+    }
+
+    /// <summary>
+    /// Generates the code base.
+    /// </summary>
+    /// <param name="general">The general.</param>
+    public async Task GenerateCodeBase(DataGeneral general)
+    {
+        string _templete = string.Empty;
+        string _pathCless = string.Empty;
+        _dataGeneral = general;
+
+        if (_dataGeneral.IsDapper)
+        {
+            _dataGeneral.TableVista = "Repositories";
+            _templete = await ReadFile("DapperRepositoryBase.txt");
+            _templete = _templete.Replace("$EspacioNombre$", general.NameSpace);
+            _pathCless = System.IO.Path.Combine(general.FullPath, "RepositoryBase.cs");
+            await WriteFile(_pathCless, _templete);
+
+            _templete = await ReadFile("DapperRepository.txt");
+            _templete = _templete.Replace("$EspacioNombre$", general.NameSpace);
+            _pathCless = System.IO.Path.Combine(general.FullPath, "Repository.cs");
+            await WriteFile(_pathCless, _templete);
+
+
+            _templete = await ReadFile("DapperRepositoryCustomer.txt");
+            _templete = _templete.Replace("$EspacioNombre$", general.NameSpace);
+            _pathCless = System.IO.Path.Combine(general.FullPath, "RepositoryCustomer.cs");
+            await WriteFile(_pathCless, _templete);
+        }
+        else
+        {
+            _dataGeneral.TableVista = "";
+            _templete = await ReadFile("ExtensionsDataTable.txt");
+            _templete = _templete.Replace("$EspacioNombre$", general.NameSpace);
+            _pathCless = System.IO.Path.Combine(general.FullPath, "ExtensionsDataTable.cs");
+            await WriteFile(_pathCless, _templete);
+        }
+
+        _dataGeneral.TableVista = "";
+        _templete = await ReadFile("ExtensionsConvert.txt");
+        _templete = _templete.Replace("$EspacioNombre$", general.NameSpace);
+        _pathCless = System.IO.Path.Combine(general.FullPath, "ExtensionsConvert.cs");
+        await WriteFile(_pathCless, _templete);
+
     }
 
     /// <summary>

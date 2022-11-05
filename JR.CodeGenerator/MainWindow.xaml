@@ -190,6 +190,19 @@
                         Grid.Column="1"
                         Margin="0,3,0,3"
                         IsChecked="{Binding ToTitleCase}"
+                        ToolTip="Pone En Mayúsculas Cada Palabra De Los Campos Y Las Clases" />
+
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="Dapper Class"
+                        ToolTip="Agrega Repositorio para Dapper y Services" />
+                    <CheckBox
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Margin="0,3,0,3"
+                        IsChecked="{Binding IsDapper}"
                         ToolTip="Nomde de Campos" />
 
                 </Grid>

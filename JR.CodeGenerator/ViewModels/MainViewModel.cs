@@ -23,7 +23,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ConctDBCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateCommand))]
-    string serverName =  "localhost";
+    string serverName = "localhost";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEnableUderPass))]
@@ -38,7 +38,7 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GenerateCommand))]
-#if debug
+#if DEBUG
     string empresa = "Grupo Cercasa";
 #else
     string empresa;
@@ -46,7 +46,7 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GenerateCommand))]
-#if debug
+#if DEBUG
     string autor =   "Jonás Requena";
 #else
     string autor;
@@ -54,7 +54,7 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GenerateCommand))]
-#if debug
+#if DEBUG
     string nameSpace =  "PruebaInicial";
 #else
     string nameSpace;
@@ -67,22 +67,12 @@ public partial class MainViewModel : ObservableObject
     string pathCode;
 
     [ObservableProperty]
+    bool isDapper;
+
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DataTables))]
     string textBuscar;
-    /// <summary>
-    /// Gets or sets the text buscar.
-    /// </summary>
-    /// <value>
-    /// The text buscar.
-    /// </value>
-    //public string TextBuscar
-    //{
-    //    get => textBuscar;
-    //    set
-    //    {
-    //        SetProperty(ref textBuscar, value);
-    //    }
-    //}
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DataTables))]
@@ -99,7 +89,7 @@ public partial class MainViewModel : ObservableObject
     {
         get
         {
-            if(string.IsNullOrWhiteSpace(TextBuscar))
+            if (string.IsNullOrWhiteSpace(TextBuscar))
                 return dataTablesOld;
             else
             {
@@ -118,9 +108,9 @@ public partial class MainViewModel : ObservableObject
 
                 return list2;
             }
-            
+
         }
-      
+
     }
 
     /// <summary>
@@ -211,9 +201,9 @@ public partial class MainViewModel : ObservableObject
 
 
 
-   
 
-    
+
+
 
     /// <summary>
     /// Connects the dadabase asynchronous.
@@ -268,6 +258,20 @@ public partial class MainViewModel : ObservableObject
         try
         {
             Logs = new ObservableCollection<LogProceso>();
+            var _genral = GetDataGen;
+
+            var logBase = new LogProceso()
+            {
+                TableVista = "GenerateCodeBase",
+                TableName = "GenerateCodeBase",
+                Status = "LightYellow"
+            };
+            Logs.Add(logBase);
+
+            await _SQLServerService.GenerateCodeBase(_genral);
+
+            logBase.Status = "LightGreen";
+
 
             foreach (var item in DataTables)
             {
@@ -279,14 +283,16 @@ public partial class MainViewModel : ObservableObject
                         TableName = items.Name,
                         Status = "LightYellow"
                     };
+
                     Logs.Add(log);
                     await Task.Delay(50);
+
                     var _connet = GetConnet;
                     _connet.DataBase = SelectdataBases.Name;
 
-                    var _genral = GetDataGen;
                     _genral.TableName = items.Name.UpperFirstChar();
                     _genral.TableVista = item.Name;
+
                     try
                     {
                         await _SQLServerService.GenerateCode(_connet, _genral);
@@ -349,7 +355,8 @@ public partial class MainViewModel : ObservableObject
             Autor = Autor,
             NameSpace = NameSpace,
             Path = PathCode,
-            ToTitleCase = ToTitleCase
+            ToTitleCase = ToTitleCase,
+            IsDapper = IsDapper
         };
     }
 
