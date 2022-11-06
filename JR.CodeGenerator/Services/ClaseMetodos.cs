@@ -41,7 +41,7 @@ public class ClaseMetodos
         DataTable dt = new DataTable();
         var into = Environment.NewLine;
         using (var db = new SqlConnection(_connectionString))
-        {            
+        {
             var resultData = await db.QueryAsync<InfoCampo>(query);
 
             foreach (var item in resultData)
@@ -77,13 +77,57 @@ public class ClaseMetodos
     }
 
     /// <summary>
+    /// Gets the validations.
+    /// </summary>
+    /// <param name="query">The query.</param>
+    /// <param name="toTitleCase">if set to <c>true</c> [to title case].</param>
+    /// <returns></returns>
+    public async Task<string> GetValidations(string query, bool toTitleCase)
+    {
+        string result = string.Empty;
+        DataTable dt = new DataTable();
+        var into = Environment.NewLine;
+
+        using (var db = new SqlConnection(_connectionString))
+        {
+            var resultData = await db.QueryAsync<InfoCampo>(query);
+
+            foreach (var item in resultData)
+            {
+                if (item.Is_Identity == 1)
+                    continue;
+
+                string campo = toTitleCase ? item.Column_Name.ToLower().ToTitleCase() : item.Column_Name.UpperFirstChar();
+
+                if (item.Character_Maximum_Length != 0)
+                {
+                    result += $"if (string.IsNullOrWhiteSpace(val.{campo})){into}";
+                    result += $"    list.Add(ErrorValidations.Create(\"{campo}\" ,\"{campo} no puede esta vacio\"));{into}{into}";
+
+                    result += $"if (val.{campo}?.Length > {item.Character_Maximum_Length}){into}";
+                    result += $"    list.Add(ErrorValidations.Create(\"{campo}\" ,\"La longitud de {campo} es invalida, Intente reduciendo el número de caracteres\"));{into}{into}";
+                }
+
+                if (item.Clave_Foranea)
+                {
+                    result += $"if (val.{campo} == 0){into}";
+                    result += $"    list.Add(ErrorValidations.Create(\"{campo}\" ,\"{campo} no puede ser cero\"));{into}{into}";
+                }
+            }
+        }
+
+        return result;
+    }
+
+
+    /// <summary>
     /// Gets the fields insert.
     /// </summary>
     /// <param name="query">The query.</param>
     /// <param name="toTitleCase">if set to <c>true</c> [to title case].</param>
     /// <returns></returns>
     public async Task<string> GetFieldsInsert(string query)
-    {        
+    {
         string _filds = string.Empty;
         string _parameters = string.Empty;
         using (var db = new SqlConnection(_connectionString))
@@ -153,7 +197,7 @@ public class ClaseMetodos
     public async Task<string> GetFieldsPrimaryKey(string query)
     {
         string result = string.Empty;
-      
+
         using (var db = new SqlConnection(_connectionString))
         {
             var resultData = await db.QueryAsync<InfoCampo>(query);
@@ -165,7 +209,7 @@ public class ClaseMetodos
                 {
                     result = item.Column_Name.ToLower().ToTitleCase();
                     break;
-                }                      
+                }
             }
         }
 

@@ -67,7 +67,7 @@ public class InfoCampo
     /// <value>
     /// The maximum length of the character.
     /// </value>
-    public int? Character_Maximum_Length { get; set; }
+    public int Character_Maximum_Length { get; set; } = 0;
     /// <summary>
     /// Gets or sets the length of the character octet.
     /// </summary>
@@ -201,6 +201,13 @@ public class InfoCampo
     ///   <c>true</c> if [clave primaria]; otherwise, <c>false</c>.
     /// </value>
     public bool Clave_Primaria { get; set; }
+    /// <summary>
+    /// Gets or sets a value indicating whether [clave foranea].
+    /// </summary>
+    /// <value>
+    ///   <c>true</c> if [clave foranea]; otherwise, <c>false</c>.
+    /// </value>
+    public bool Clave_Foranea { get; set; }
     /// <summary>
     /// Gets or sets the campo descripcion.
     /// </summary>

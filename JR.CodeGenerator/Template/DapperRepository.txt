@@ -19,8 +19,8 @@ public abstract class BaseRepository<T> : Base<T> where T : class
     protected readonly SqlConnection _Conexion;
     protected readonly SqlTransaction _SqlTransaction;
     private readonly string _UserNameAudit = string.Empty;
-    protected string TableName = nameof(T);
-    protected string QuerySelectAll = $"Select * From {nameof(T)}";
+    protected string TableName = typeof(T).Name;
+    protected string QuerySelectAll = $"Select * From {typeof(T).Name}";
     protected string QuerySelectByID;
     protected string NoQueryInsert;
     protected string NoQueryUpdate;

@@ -1,0 +1,32 @@
+﻿namespace $EspacioNombre$;
+
+/// <summary>
+/// Error Validations
+/// </summary>
+public class ErrorValidations
+{
+    public readonly string FieldName;
+    public readonly string Message;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ErrorValidations"/> class.
+    /// </summary>
+    /// <param name="fieldName">Name of the field.</param>
+    /// <param name="message">The message.</param>
+    private ErrorValidations(string fieldName, string message)
+    {
+        FieldName = fieldName;
+        Message = message;
+    }
+
+    /// <summary>
+    /// Creates the specified field name.
+    /// </summary>
+    /// <param name="fieldName">Name of the field.</param>
+    /// <param name="message">The message.</param>
+    /// <returns></returns>
+    public static ErrorValidations Create(string fieldName, string message)
+    {
+        return new ErrorValidations(fieldName, message);
+    }
+}

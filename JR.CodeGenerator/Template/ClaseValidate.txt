@@ -1,0 +1,22 @@
+﻿
+namespace $EspacioNombre$;
+
+/// <summary>
+/// $TableName$Validate
+/// </summary>
+public static class $TableName$Validate
+{
+    /// <summary>
+    /// Converts to valitate.
+    /// </summary>
+    /// <param name="campanas">The campanas.</param>
+    /// <returns></returns>
+    public static List<ErrorValidations> ToValitate(this $TableName$ val)
+    {
+        List<ErrorValidations> list = new List<ErrorValidations>();
+
+        $Validations$
+
+        return list;
+    }
+}

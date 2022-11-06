@@ -126,7 +126,7 @@ public class SQLServerService : ISQLServerService
         _dataConnection = conct;
         _dataGeneral = general;
         var createClass = new ClaseMetodos(GetConnectionString);
-        string _tableNameClass = general.TableName.ToLower().ToTitleCase();
+        string _tableNameClass = general.ToTitleCase ?  general.TableName.ToLower().ToTitleCase() : general.TableName.UpperFirstChar();
 
 
 
@@ -148,31 +148,44 @@ public class SQLServerService : ISQLServerService
         await WriteFile(pathCless, entityTemp);
 
 
+
+        //Validaciones
+        _dataGeneral.TableVista = "Validate";
+        entityTemp = await ReadFile("ClaseValidate.txt");
+        entityTemp = entityTemp.Replace("$EspacioNombre$", general.NameSpace)
+                                .Replace("$TableName$", _tableNameClass);
+
+        camposClessTemp = await createClass.GetValidations(queryCampoosTabla, general.ToTitleCase);
+        entityTemp = entityTemp.Replace("$Validations$", camposClessTemp);
+
+        pathCless = System.IO.Path.Combine(general.FullPath, _tableNameClass + "Validate.cs");
+        await WriteFile(pathCless, entityTemp);
+
+        //Validaciones
+
         if (_dataGeneral.IsDapper)
         {
-            string _templete = string.Empty;
-            string _templete2 = string.Empty;
             _dataGeneral.TableVista = "Services";
-            _templete = await ReadFile("DapperServiceEntities.txt");
-            _templete = _templete.Replace("$EspacioNombre$", general.NameSpace)
+            entityTemp = await ReadFile("DapperServiceEntities.txt");
+            entityTemp = entityTemp.Replace("$EspacioNombre$", general.NameSpace)
                                  .Replace("$TableName$", _tableNameClass);
 
-           
-            _templete2 = await createClass.GetFieldsInsert(queryCampoosTabla);         
-            _templete = _templete.Replace("$FieldssInsert$", _templete2);
+
+            camposClessTemp = await createClass.GetFieldsInsert(queryCampoosTabla);
+            entityTemp = entityTemp.Replace("$FieldssInsert$", camposClessTemp);
 
 
-            _templete2 = await createClass.GetFieldsUpdate(queryCampoosTabla);
-            _templete = _templete.Replace("$FieldsUpdate$", _templete2);
+            camposClessTemp = await createClass.GetFieldsUpdate(queryCampoosTabla);
+            entityTemp = entityTemp.Replace("$FieldsUpdate$", camposClessTemp);
 
 
-            _templete2 = await createClass.GetFieldsPrimaryKey(queryCampoosTabla);
-            _templete = _templete.Replace("$Clave_Primaria$", _templete2);
+            camposClessTemp = await createClass.GetFieldsPrimaryKey(queryCampoosTabla);
+            entityTemp = entityTemp.Replace("$Clave_Primaria$", camposClessTemp);
 
 
             pathCless = System.IO.Path.Combine(general.FullPath, $"{_tableNameClass}Service.cs");
 
-            await WriteFile(pathCless, _templete);
+            await WriteFile(pathCless, entityTemp);
         }
 
 
@@ -220,6 +233,13 @@ public class SQLServerService : ISQLServerService
         _templete = await ReadFile("ExtensionsConvert.txt");
         _templete = _templete.Replace("$EspacioNombre$", general.NameSpace);
         _pathCless = System.IO.Path.Combine(general.FullPath, "ExtensionsConvert.cs");
+        await WriteFile(_pathCless, _templete);
+
+
+        _dataGeneral.TableVista = "";
+        _templete = await ReadFile("ErrorValidations.txt");
+        _templete = _templete.Replace("$EspacioNombre$", general.NameSpace);
+        _pathCless = System.IO.Path.Combine(general.FullPath, "ErrorValidations.cs");
         await WriteFile(_pathCless, _templete);
 
     }
