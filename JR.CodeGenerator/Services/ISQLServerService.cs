@@ -39,5 +39,18 @@ public interface ISQLServerService
     /// <returns></returns>
     Task GenerateCodeBase(DataGeneral general);
 
+    /// <summary>
+    /// Sets the setting.
+    /// </summary>
+    /// <param name="setting">The setting.</param>
+    /// <returns></returns>
+    Task SetSetting(Setting setting);
+
+    /// <summary>
+    /// Gets the setting.
+    /// </summary>
+    /// <returns></returns>
+    Task<Setting> GetSetting();
+
 }
 

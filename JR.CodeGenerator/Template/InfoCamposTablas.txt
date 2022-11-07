@@ -67,4 +67,4 @@
 			   AND co.name = c.COLUMN_NAME
 	   ) AS Campo_Descripcion
 FROM INFORMATION_SCHEMA.COLUMNS c
-WHERE (TABLE_NAME = '$TableName$')
+WHERE (TABLE_NAME = '$TableName$') AND TABLE_SCHEMA = '$SchemaName$'

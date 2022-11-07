@@ -14,9 +14,6 @@
     DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
     mc:Ignorable="d">
 
-
-
-
     <Grid Margin="5">
         <Grid.Resources>
             <Style TargetType="Border">
@@ -203,6 +200,19 @@
                         Grid.Column="1"
                         Margin="0,3,0,3"
                         IsChecked="{Binding IsDapper}"
+                        ToolTip="Nomde de Campos" />
+
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        HorizontalAlignment="Right"
+                        Content="Gen. Triggers"
+                        ToolTip="Genara scripts sql para craar triggers en la tabla para atralizar auditorias de Edicion y Eliminacion." />
+                    <CheckBox
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Margin="0,3,0,3"
+                        IsChecked="{Binding IsCreateTrigger}"
                         ToolTip="Nomde de Campos" />
 
                 </Grid>
