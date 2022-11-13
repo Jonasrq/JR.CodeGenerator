@@ -1,4 +1,9 @@
-﻿BEGIN TRANSACTION
+﻿
+
+USE [$DataBaseName$]
+GO
+
+BEGIN TRANSACTION
 SET QUOTED_IDENTIFIER ON
 SET ARITHABORT ON
 SET NUMERIC_ROUNDABORT OFF
@@ -86,7 +91,6 @@ GO
 
 CREATE OR ALTER TRIGGER  [$Schema$].[$TableName$_Update_Trigger] ON $Schema$.[$TableName$] 
 FOR UPDATE AS
-
 BEGIN
 --============  ESTO ES PARA VALUDAR =======================================
 	--DECLARE @User_Name VarChar(128) = 'JonasRQ'

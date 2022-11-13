@@ -139,7 +139,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="100" />
                         <ColumnDefinition Width="2*" />
                     </Grid.ColumnDefinitions>
 
@@ -176,44 +176,78 @@
                         Margin="0,3,0,3"
                         Text="{Binding NameSpace, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <Label
-                        Grid.Row="3"
-                        Grid.Column="0"
-                        HorizontalAlignment="Right"
-                        Content="ToTitleCase?"
-                        ToolTip="Nomde de Campos" />
-                    <CheckBox
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        Margin="0,3,0,3"
-                        IsChecked="{Binding ToTitleCase}"
-                        ToolTip="Pone En Mayúsculas Cada Palabra De Los Campos Y Las Clases" />
+                    <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="80" />
+                        </Grid.ColumnDefinitions>
 
-                    <Label
-                        Grid.Row="4"
-                        Grid.Column="0"
-                        HorizontalAlignment="Right"
-                        Content="Dapper Class"
-                        ToolTip="Agrega Repositorio para Dapper y Services" />
-                    <CheckBox
-                        Grid.Row="4"
-                        Grid.Column="1"
-                        Margin="0,3,0,3"
-                        IsChecked="{Binding IsDapper}"
-                        ToolTip="Nomde de Campos" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalAlignment="Right"
+                            Content="ToTitleCase?"
+                            ToolTip="Nomde de Campos" />
+                        <CheckBox
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="0,3,0,3"
+                            IsChecked="{Binding ToTitleCase}"
+                            ToolTip="Pone En Mayúsculas Cada Palabra De Los Campos Y Las Clases" />
 
-                    <Label
-                        Grid.Row="5"
-                        Grid.Column="0"
-                        HorizontalAlignment="Right"
-                        Content="Gen. Triggers"
-                        ToolTip="Genara scripts sql para craar triggers en la tabla para atralizar auditorias de Edicion y Eliminacion." />
-                    <CheckBox
-                        Grid.Row="5"
-                        Grid.Column="1"
-                        Margin="0,3,0,3"
-                        IsChecked="{Binding IsCreateTrigger}"
-                        ToolTip="Nomde de Campos" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            HorizontalAlignment="Right"
+                            Content="Dapper Class"
+                            ToolTip="Agrega Repositorio para Dapper y Services" />
+                        <CheckBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="0,3,0,3"
+                            IsChecked="{Binding IsDapper}"
+                            ToolTip="Nomde de Campos" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            HorizontalAlignment="Right"
+                            Content="Gen. Triggers"
+                            ToolTip="Genara scripts sql para craar triggers en la tabla para atralizar auditorias de Edicion y Eliminacion." />
+                        <CheckBox
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="0,3,0,3"
+                            IsChecked="{Binding IsCreateTrigger}"
+                            ToolTip="Nomde de Campos" />
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            HorizontalAlignment="Right"
+                            Content="Script One File"
+                            ToolTip="Genara scripts sql para craar triggers en la tabla para atralizar auditorias de Edicion y Eliminacion." />
+                        <CheckBox
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            Margin="0,3,0,3"
+                            IsChecked="{Binding IsOneFileScript}"
+                            ToolTip="Nomde de Campos" />
+
+
+                    </Grid>
+
+
 
                 </Grid>
             </GroupBox>

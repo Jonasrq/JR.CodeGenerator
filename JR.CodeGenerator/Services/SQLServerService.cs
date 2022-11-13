@@ -82,6 +82,9 @@ public class SQLServerService : ISQLServerService
 
             foreach (DataRow dataTable in dataTables.Rows)
             {
+                if (dataTable["TABLE_NAME"].ToString() == "sysdiagrams")
+                    continue;
+
                 string squema = "Tablas";
                 string imageUri = "/Images/table.png";
                 if (dataTable["TABLE_TYPE"].ToString() == "VIEW")
@@ -128,8 +131,10 @@ public class SQLServerService : ISQLServerService
         _dataConnection = conct;
         _dataGeneral = general;
 
+        bool isTabla = (_dataGeneral.TableVista == "Tablas");
+
         var createClass = new ClaseMetodos(GetConnectionString);
-        string _tableNameClass = general.ToTitleCase ?  general.TableName.ToLower().ToTitleCase() : general.TableName.UpperFirstChar();
+        string _tableNameClass = general.ToTitleCase ? general.TableName.ToLower().ToTitleCase() : general.TableName.UpperFirstChar();
 
 
 
@@ -148,12 +153,13 @@ public class SQLServerService : ISQLServerService
                                .Replace("#Autor#", general.Autor)
                                .Replace("#Fecha#", DateTime.Now.ToString("dd/MM/yyyy"));
 
-        string pathCless = System.IO.Path.Combine(general.FullPath, _tableNameClass + ".cs");
+        string sufijoNemeFile = await BuscarNombreClase("$TableName$", "ClaseEntidad.txt");
+        string pathCless = System.IO.Path.Combine(general.FullPath, _tableNameClass + sufijoNemeFile + ".cs");
         await WriteFile(pathCless, entityTemp);
 
 
 
-        if(_dataGeneral.TableVista == "Tablas" && _dataGeneral.IsCreateTrigger)
+        if (_dataGeneral.TableVista == "Tablas" && _dataGeneral.IsCreateTrigger)
         {
             _dataGeneral.TableVista = "Scripts";
 
@@ -163,18 +169,19 @@ public class SQLServerService : ISQLServerService
                 entityTemp = await ReadFile("ScriptTableAudit.txt");
                 entityTemp = entityTemp.Replace("$DataBaseName$", _dataConnection.DataBase);
                 await WriteFile(pathCless, entityTemp);
-            }          
+            }
 
             entityTemp = await ReadFile("ScriptTriggersAudit.txt");
-            entityTemp = entityTemp.Replace("$TableName$", _tableNameClass)
+            entityTemp = entityTemp.Replace("$DataBaseName$", _dataConnection.DataBase)
+                                   .Replace("$TableName$", _tableNameClass)
                                    .Replace("$Schema$", _dataGeneral.SchemaName)
                                    .Replace("$DataBaseName$", _dataConnection.DataBase);
 
-            pathCless = System.IO.Path.Combine(general.FullPath, $"ScriptTriggersAudit_{_tableNameClass}.sql");
+            string _fileNameScript = _dataGeneral.IsOneFileScript ? "ScriptTriggersAudit.sql" : $"ScriptTriggersAudit_{_tableNameClass}.sql";
+
+            pathCless = System.IO.Path.Combine(general.FullPath, _fileNameScript);
             await WriteFile(pathCless, entityTemp);
         }
-
-
 
         //Validaciones
         _dataGeneral.TableVista = "Validate";
@@ -185,7 +192,8 @@ public class SQLServerService : ISQLServerService
         camposClessTemp = await createClass.GetValidations(queryCampoosTabla, general.ToTitleCase);
         entityTemp = entityTemp.Replace("$Validations$", camposClessTemp);
 
-        pathCless = System.IO.Path.Combine(general.FullPath, _tableNameClass + "Validate.cs");
+        sufijoNemeFile = await BuscarNombreClase("$TableName$", "ClaseValidate.txt");
+        pathCless = System.IO.Path.Combine(general.FullPath, $"{_tableNameClass}{sufijoNemeFile}.cs");
         await WriteFile(pathCless, entityTemp);
 
         //Validaciones
@@ -193,24 +201,32 @@ public class SQLServerService : ISQLServerService
         if (_dataGeneral.IsDapper)
         {
             _dataGeneral.TableVista = "Services";
-            entityTemp = await ReadFile("DapperServiceEntities.txt");
+
+
+            entityTemp = isTabla ? await ReadFile("DapperServiceEntities.txt") : await ReadFile("DapperServiceCustmerRepositoryEntities.txt");
             entityTemp = entityTemp.Replace("$EspacioNombre$", general.NameSpace)
-                                 .Replace("$TableName$", _tableNameClass);
+                                   .Replace("$TableName$", _tableNameClass);
+
+            if (isTabla)
+            {
+                camposClessTemp = await createClass.GetFieldsInsert(queryCampoosTabla, general.ToTitleCase);
+                entityTemp = entityTemp.Replace("$FieldssInsert$", camposClessTemp);
 
 
-            camposClessTemp = await createClass.GetFieldsInsert(queryCampoosTabla);
-            entityTemp = entityTemp.Replace("$FieldssInsert$", camposClessTemp);
+                camposClessTemp = await createClass.GetFieldsUpdate(queryCampoosTabla, general.ToTitleCase);
+                entityTemp = entityTemp.Replace("$FieldsUpdate$", camposClessTemp);
 
 
-            camposClessTemp = await createClass.GetFieldsUpdate(queryCampoosTabla);
-            entityTemp = entityTemp.Replace("$FieldsUpdate$", camposClessTemp);
+                camposClessTemp = await createClass.GetFieldsPrimaryKey(queryCampoosTabla);
+                entityTemp = entityTemp.Replace("$Clave_Primaria$", camposClessTemp);
+            }
+
+            sufijoNemeFile = isTabla ? await BuscarNombreClase("$TableName$", "DapperServiceEntities.txt") :
+                                       await BuscarNombreClase("$TableName$", "DapperServiceCustmerRepositoryEntities.txt");
+
+            pathCless = System.IO.Path.Combine(general.FullPath, $"{_tableNameClass}{sufijoNemeFile}.cs");
 
 
-            camposClessTemp = await createClass.GetFieldsPrimaryKey(queryCampoosTabla);
-            entityTemp = entityTemp.Replace("$Clave_Primaria$", camposClessTemp);
-
-
-            pathCless = System.IO.Path.Combine(general.FullPath, $"{_tableNameClass}Service.cs");
 
             await WriteFile(pathCless, entityTemp);
         }
@@ -263,13 +279,18 @@ public class SQLServerService : ISQLServerService
         await WriteFile(_pathCless, _templete);
 
 
-        _dataGeneral.TableVista = "";
         _templete = await ReadFile("ErrorValidations.txt");
         _templete = _templete.Replace("$EspacioNombre$", general.NameSpace);
         _pathCless = System.IO.Path.Combine(general.FullPath, "ErrorValidations.cs");
         await WriteFile(_pathCless, _templete);
 
+        _templete = await ReadFile("Error.txt");
+        _templete = _templete.Replace("$EspacioNombre$", general.NameSpace);
+        _pathCless = System.IO.Path.Combine(general.FullPath, "Error.cs");
+        await WriteFile(_pathCless, _templete);
+
     }
+
 
     /// <summary>
     /// Geras the entidad.
@@ -294,7 +315,7 @@ public class SQLServerService : ISQLServerService
 
         string settingJson = await ReadFile(fileName, "");
 
-        return  string.IsNullOrWhiteSpace(settingJson) ? null : JsonSerializer.Deserialize<Setting>(settingJson);
+        return string.IsNullOrWhiteSpace(settingJson) ? null : JsonSerializer.Deserialize<Setting>(settingJson);
 
     }
 
@@ -323,7 +344,6 @@ public class SQLServerService : ISQLServerService
         return list.OrderBy(x => x.Name).ToList();
     }
 
-    
 
     /// <summary>
     /// Reads the file.
@@ -340,8 +360,8 @@ public class SQLServerService : ISQLServerService
             result = await File.ReadAllTextAsync(path, Encoding.UTF8);
         }
         catch (Exception)
-        {}
-      
+        { }
+
         return result;
     }
 
@@ -355,9 +375,51 @@ public class SQLServerService : ISQLServerService
     {
         if (!Directory.Exists(_dataGeneral.FullPath))
             Directory.CreateDirectory(_dataGeneral.FullPath);
+        if (_dataGeneral.IsOneFileScript)
+            await File.AppendAllTextAsync(pathDocuName, document, Encoding.UTF8);
+        else
+            await File.WriteAllTextAsync(pathDocuName, document, Encoding.UTF8);
 
-        await File.WriteAllTextAsync(pathDocuName, document, Encoding.UTF8);
     }
+
+    /// <summary>
+    /// Buscars the nombre clase.
+    /// </summary>
+    /// <param name="palabraClave">The palabra clave.</param>
+    /// <param name="file">The file.</param>
+    /// <param name="folder">The folder.</param>
+    /// <returns></returns>
+    private async Task<string> BuscarNombreClase(string palabraClave, string file, string folder = "Template")
+    {
+        string result = string.Empty;
+        string path = System.IO.Path.Combine(Environment.CurrentDirectory, folder, file);
+        try
+        {
+            var resultLines = await File.ReadAllLinesAsync(path, Encoding.UTF8);
+
+            foreach (var item in resultLines)
+            {
+                if (item.Contains("public"))
+                {
+                    var resulItem = item.Split(' ');
+
+                    foreach (var item2 in resulItem)
+                    {
+                        if (item2.Contains(palabraClave))
+                            return item2.Replace(palabraClave, "");
+                    }
+                }
+
+
+            }
+        }
+        catch (Exception)
+        { }
+
+        return result;
+
+    }
+
 
 }
 

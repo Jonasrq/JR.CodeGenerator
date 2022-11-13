@@ -1,4 +1,5 @@
 ﻿USE [$DataBaseName$_Audit]
+GO
 
 CREATE TABLE [dbo].[Auditorias](
 	[Id] [int] IDENTITY(1,1) NOT NULL,

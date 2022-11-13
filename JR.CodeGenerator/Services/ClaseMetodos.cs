@@ -98,20 +98,25 @@ public class ClaseMetodos
                     continue;
 
                 string campo = toTitleCase ? item.Column_Name.ToLower().ToTitleCase() : item.Column_Name.UpperFirstChar();
-
-                if (item.Character_Maximum_Length != 0)
+                if (campo != "AuditKey")
                 {
-                    result += $"if (string.IsNullOrWhiteSpace(val.{campo})){into}";
-                    result += $"    list.Add(ErrorValidations.Create(\"{campo}\" ,\"{campo} no puede esta vacio\"));{into}{into}";
+                    if (item.Character_Maximum_Length != 0)
+                    {
+                        result += $"if (string.IsNullOrWhiteSpace(entity.{campo})){into}";
+                        result += $"    list.Add(Error.Create(\"{campo}\" ,\"{campo} no puede esta vacio\"));{into}{into}";
 
-                    result += $"if (val.{campo}?.Length > {item.Character_Maximum_Length}){into}";
-                    result += $"    list.Add(ErrorValidations.Create(\"{campo}\" ,\"La longitud de {campo} es invalida, Intente reduciendo el número de caracteres\"));{into}{into}";
-                }
+                        if (item.Character_Maximum_Length != -1)
+                        {
+                            result += $"if (entity.{campo}?.Length > {item.Character_Maximum_Length}){into}";
+                            result += $"    list.Add(Error.Create(\"{campo}\" ,\"La longitud de {campo} es invalida, Intente reduciendo el número de caracteres\"));{into}{into}";
+                        }
+                    }
 
-                if (item.Clave_Foranea)
-                {
-                    result += $"if (val.{campo} == 0){into}";
-                    result += $"    list.Add(ErrorValidations.Create(\"{campo}\" ,\"{campo} no puede ser cero\"));{into}{into}";
+                    if (item.Clave_Foranea)
+                    {
+                        result += $"if (entity.{campo} == 0){into}";
+                        result += $"    list.Add(Error.Create(\"{campo}\" ,\"{campo} no puede ser cero\"));{into}{into}";
+                    }
                 }
             }
         }
@@ -126,7 +131,7 @@ public class ClaseMetodos
     /// <param name="query">The query.</param>
     /// <param name="toTitleCase">if set to <c>true</c> [to title case].</param>
     /// <returns></returns>
-    public async Task<string> GetFieldsInsert(string query)
+    public async Task<string> GetFieldsInsert(string query, bool toTitleCase)
     {
         string _filds = string.Empty;
         string _parameters = string.Empty;
@@ -139,7 +144,8 @@ public class ClaseMetodos
                 if (item.Is_Identity == 1)
                     continue;
 
-                _fieldName = item.Column_Name.ToLower().ToTitleCase();
+                _fieldName = toTitleCase ? item.Column_Name.ToLower().ToTitleCase() : item.Column_Name.UpperFirstChar();
+
 
                 if (string.IsNullOrEmpty(_filds))
                 {
@@ -163,7 +169,7 @@ public class ClaseMetodos
     /// <param name="query">The query.</param>
     /// <param name="toTitleCase">if set to <c>true</c> [to title case].</param>
     /// <returns></returns>
-    public async Task<string> GetFieldsUpdate(string query)
+    public async Task<string> GetFieldsUpdate(string query, bool toTitleCase)
     {
         string result = string.Empty;
         string _where = string.Empty;
@@ -175,10 +181,21 @@ public class ClaseMetodos
 
             foreach (var item in resultData)
             {
-                _fieldName = item.Column_Name.ToLower().ToTitleCase();
+                _fieldName = toTitleCase ? item.Column_Name.ToLower().ToTitleCase() : item.Column_Name.UpperFirstChar();
 
                 if (item.Clave_Primaria)
-                    _where = $"WHERE {_fieldName} = @id";
+                {
+                    if (string.IsNullOrEmpty(_where))
+                        _where = $"WHERE {_fieldName} = @{_fieldName}";
+                    else
+                        _where += $" AND {_fieldName} = @{_fieldName}";
+
+                    continue;
+                }
+
+                if (item.Is_Identity == 1)
+                    continue;
+
                 if (string.IsNullOrEmpty(result))
                     result += $"{_fieldName}=@{_fieldName},";
                 else
@@ -186,7 +203,7 @@ public class ClaseMetodos
             }
         }
 
-        return result.TrimEnd(',') + Environment.NewLine + _where;
+        return $"{result.TrimEnd(',')}{Environment.NewLine}{_where}";
     }
 
     /// <summary>

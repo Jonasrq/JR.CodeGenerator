@@ -1,5 +1,7 @@
-﻿
-namespace $EspacioNombre$;
+﻿using GrupoCercasa.BackEnd.Data;
+using GrupoCercasa.Shared.Data;
+
+namespace $EspacioNombre$.Service;
 
 /// <summary>
 /// $TableName$Validate
@@ -9,14 +11,15 @@ public static class $TableName$Validate
     /// <summary>
     /// Converts to valitate.
     /// </summary>
-    /// <param name="campanas">The campanas.</param>
+    /// <param name="entity">The entity.</param>
     /// <returns></returns>
-    public static List<ErrorValidations> ToValitate(this $TableName$ val)
+    /// <exception cref="GrupoCercasa.Shared.Data.ErrorValidations"></exception>
+    public static List<ErrorValidations> ToValitate(this $TableName$ entity)
     {
-        List<ErrorValidations> list = new List<ErrorValidations>();
+        List<Error> list = new List<Error>();
 
         $Validations$
 
-        return list;
+        return list.Any()? throw new ErrorValidations(list) : null;
     }
 }
