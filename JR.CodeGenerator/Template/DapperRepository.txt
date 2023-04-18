@@ -9,7 +9,6 @@ using System.Linq.Expressions;
 // NOTA: Debe tener instalado el NuGet ExpressionExtensionSQL Version: 1.2.7 ó Superior
 namespace $EspacioNombre$.Repository;
 
-
 /// <summary>
 /// Base Repository
 /// </summary>

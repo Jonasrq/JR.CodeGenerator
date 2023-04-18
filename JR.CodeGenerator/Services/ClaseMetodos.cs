@@ -91,9 +91,10 @@ public class ClaseMetodos
         using (var db = new SqlConnection(_connectionString))
         {
             var resultData = await db.QueryAsync<InfoCampo>(query);
-
+            int i = 0;
             foreach (var item in resultData)
             {
+                i++;
                 if (item.Is_Identity == 1)
                     continue;
 
@@ -102,20 +103,20 @@ public class ClaseMetodos
                 {
                     if (item.Character_Maximum_Length != 0)
                     {
-                        result += $"if (string.IsNullOrWhiteSpace(entity.{campo})){into}";
-                        result += $"    list.Add(Error.Create(\"{campo}\" ,\"{campo} no puede esta vacio\"));{into}{into}";
+                        result += i == 1 ? $"if (string.IsNullOrWhiteSpace(entity.{campo})){into}" : $"        if (string.IsNullOrWhiteSpace(entity.{campo})){into}";
+                        result += $"        list.Add(Error.Create(\"{campo}\" ,\"{campo} no puede esta vacio\"));{into}{into}";
 
                         if (item.Character_Maximum_Length != -1)
                         {
-                            result += $"if (entity.{campo}?.Length > {item.Character_Maximum_Length}){into}";
-                            result += $"    list.Add(Error.Create(\"{campo}\" ,\"La longitud de {campo} es invalida, Intente reduciendo el número de caracteres\"));{into}{into}";
+                            result += $"        if (entity.{campo}?.Length > {item.Character_Maximum_Length}){into}";
+                            result += $"        list.Add(Error.Create(\"{campo}\" ,\"La longitud de {campo} es invalida, Intente reduciendo el número de caracteres\"));{into}{into}";
                         }
                     }
 
                     if (item.Clave_Foranea)
                     {
-                        result += $"if (entity.{campo} == 0){into}";
-                        result += $"    list.Add(Error.Create(\"{campo}\" ,\"{campo} no puede ser cero\"));{into}{into}";
+                        result += $"        if (entity.{campo} == 0){into}";
+                        result += $"        list.Add(Error.Create(\"{campo}\" ,\"{campo} no puede ser cero\"));{into}{into}";
                     }
                 }
             }
@@ -149,18 +150,18 @@ public class ClaseMetodos
 
                 if (string.IsNullOrEmpty(_filds))
                 {
-                    _filds = _fieldName;
-                    _parameters = "@" + _fieldName;
+                    _filds = $"                            {_fieldName}";
+                    _parameters = $"                            @{_fieldName}";
                 }
                 else
                 {
-                    _filds += $", {Environment.NewLine}{_fieldName}";
-                    _parameters += $", {Environment.NewLine}@{_fieldName}";
+                    _filds += $", {Environment.NewLine}                            {_fieldName}";
+                    _parameters += $", {Environment.NewLine}                            @{_fieldName}";
                 }
             }
         }
 
-        return $"{Environment.NewLine}({_filds}) {Environment.NewLine}Values {Environment.NewLine}({_parameters})";
+        return $"{Environment.NewLine}                            ({_filds}) {Environment.NewLine}Values {Environment.NewLine}                            ({_parameters})";
     }
 
     /// <summary>
@@ -186,7 +187,7 @@ public class ClaseMetodos
                 if (item.Clave_Primaria)
                 {
                     if (string.IsNullOrEmpty(_where))
-                        _where = $"WHERE {_fieldName} = @{_fieldName}";
+                        _where = $"                            WHERE {_fieldName} = @{_fieldName}";
                     else
                         _where += $" AND {_fieldName} = @{_fieldName}";
 
@@ -197,9 +198,9 @@ public class ClaseMetodos
                     continue;
 
                 if (string.IsNullOrEmpty(result))
-                    result += $"{_fieldName}=@{_fieldName},";
+                    result += $"                                {_fieldName}=@{_fieldName},";
                 else
-                    result += $"{Environment.NewLine}{_fieldName}=@{_fieldName},";
+                    result += $"{Environment.NewLine}                                {_fieldName}=@{_fieldName},";
             }
         }
 

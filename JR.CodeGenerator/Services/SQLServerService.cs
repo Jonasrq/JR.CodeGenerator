@@ -1,13 +1,11 @@
-﻿using JR.CodeGenerator.Extensions;
-using JR.CodeGenerator.Models;
-
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics.SymbolStore;
 using System.IO;
-using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
+
+using JR.CodeGenerator.Extensions;
+using JR.CodeGenerator.Models;
 
 /// <summary>
 /// 
@@ -159,6 +157,13 @@ public class SQLServerService : ISQLServerService
 
 
 
+        entityTemp = entityTemp.Replace("BackEnd.Data", "Shared.Dto.ViewModels");
+        entityTemp = entityTemp.Replace(_tableNameClass, $"{_tableNameClass}DTO");
+        pathCless = System.IO.Path.Combine(general.FullPath, _tableNameClass + sufijoNemeFile + "DTO.cs");
+        await WriteFile(pathCless, entityTemp);
+
+
+
         if (_dataGeneral.TableVista == "Tablas" && _dataGeneral.IsCreateTrigger)
         {
             _dataGeneral.TableVista = "Scripts";
@@ -196,8 +201,6 @@ public class SQLServerService : ISQLServerService
         pathCless = System.IO.Path.Combine(general.FullPath, $"{_tableNameClass}{sufijoNemeFile}.cs");
         await WriteFile(pathCless, entityTemp);
 
-        //Validaciones
-
         if (_dataGeneral.IsDapper)
         {
             _dataGeneral.TableVista = "Services";
@@ -226,8 +229,37 @@ public class SQLServerService : ISQLServerService
 
             pathCless = System.IO.Path.Combine(general.FullPath, $"{_tableNameClass}{sufijoNemeFile}.cs");
 
+            await WriteFile(pathCless, entityTemp);
 
 
+
+            // IServicesClient
+            _dataGeneral.TableVista = "IServicesClient";
+            entityTemp = await ReadFile("IServicesClient.txt");
+            entityTemp = entityTemp.Replace("$TableName$", _tableNameClass);
+            pathCless = System.IO.Path.Combine(general.FullPath, $"I{_tableNameClass}ServicesClient.cs");
+            await WriteFile(pathCless, entityTemp);
+
+
+            // ServicesClient
+            _dataGeneral.TableVista = "ServicesClient";
+            entityTemp = await ReadFile("ServicesClient.txt");
+            entityTemp = entityTemp.Replace("$TableName$", _tableNameClass);
+            pathCless = System.IO.Path.Combine(general.FullPath, $"{_tableNameClass}ServicesClient.cs");
+            await WriteFile(pathCless, entityTemp);
+
+            // Controllers
+            _dataGeneral.TableVista = "Controllers";
+            entityTemp = await ReadFile("Controller.txt");
+            entityTemp = entityTemp.Replace("$TableName$", _tableNameClass);
+            pathCless = System.IO.Path.Combine(general.FullPath, $"{_tableNameClass}Controllers.cs");
+            await WriteFile(pathCless, entityTemp);
+
+            // ServicesClientFromEnd
+            _dataGeneral.TableVista = "ServicesClientFromEnd";
+            entityTemp = await ReadFile("ServicesFromEnd.txt");
+            entityTemp = entityTemp.Replace("$TableName$", _tableNameClass);
+            pathCless = System.IO.Path.Combine(general.FullPath, $"{_tableNameClass}Service.cs");
             await WriteFile(pathCless, entityTemp);
         }
 
@@ -375,7 +407,7 @@ public class SQLServerService : ISQLServerService
     {
         if (!Directory.Exists(_dataGeneral.FullPath))
             Directory.CreateDirectory(_dataGeneral.FullPath);
-        if (_dataGeneral.IsOneFileScript)
+        if (_dataGeneral.IsOneFileScript && _dataGeneral.TableVista == "Scripts")
             await File.AppendAllTextAsync(pathDocuName, document, Encoding.UTF8);
         else
             await File.WriteAllTextAsync(pathDocuName, document, Encoding.UTF8);

@@ -12,11 +12,11 @@ namespace $EspacioNombre$.Repository.ServicesCustmerRepository;
 internal class $TableName$ServicesCustmerRepository : BaseRepositoryCustomer<$TableName$>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="$TableName$SServicesCustmerRepository" /> class.
+    /// Initializes a new instance of the <see cref="$TableName$ServicesCustmerRepository"/> class.
     /// </summary>
     /// <param name="conexion">The conexion.</param>
     /// <param name="querySelect"></param>
-    public $TableName$ServicesCustmerRepository (SqlConnection conexion, string userNameAudit = null, IDbTransaction sqlTransaction = null) :
-            base(conexion, userNameAudit, sqlTransaction)
+    public $TableName$ServicesCustmerRepository (SqlConnection conexion, string querySelect = null) :
+            base(conexion, querySelect)
     {}
 }

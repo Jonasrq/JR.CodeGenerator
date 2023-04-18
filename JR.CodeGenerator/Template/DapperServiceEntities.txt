@@ -13,7 +13,7 @@ namespace $EspacioNombre$.Repository.ServicesRepository;
 internal class $TableName$ServicesRepository : BaseRepository<$TableName$>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="$TableName$ServicesRepository" /> class.
+    /// Initializes a new instance of the <see cref="$TableName$ServicesRepository"/> class.
     /// </summary>
     /// <param name="conexion">The conexion.</param>
     /// <param name="userNameAudit">The user name auditoria</param>
@@ -27,7 +27,7 @@ internal class $TableName$ServicesRepository : BaseRepository<$TableName$>
 
         NoQueryUpdate = @"Update $TableName$ 
                             SET $FieldsUpdate$";
-
+                                
         NoQueryDelete = $"delete from $TableName$ Where $Clave_Primaria$ = @Id";
     }
 }
