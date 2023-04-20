@@ -12,23 +12,23 @@ public interface I$TableName$Services
     /// Gets all.
     /// </summary>
     /// <returns></returns>
-    Task<ResponseHelper<List<$TableName$DTO>>> GetAll();
+    Task<List<$TableName$DTO>> GetAll();
     /// <summary>
     /// Gets the pedidos by identifier.
     /// </summary>
     /// <param name="Id">The identifier.</param>
     /// <returns></returns>
-    Task<ResponseHelper<$TableName$DTO>> Get$TableName$ById(int Id);
+    Task<$TableName$DTO> Get$TableName$ById(int Id);
     /// <summary>
     /// Saves the specified entity.
     /// </summary>
     /// <param name="entity">The entity.</param>
     /// <returns></returns>
-    Task<ResponseHelper<$TableName$DTO>> Save($TableName$DTO entity);    
+    Task<$TableName$DTO> Save($TableName$DTO entity);    
     /// <summary>
     /// Deletes the specified identifier.
     /// </summary>
     /// <param name="Id">The identifier.</param>
     /// <returns></returns>
-    Task<ResponseHelper<bool>> Delete(int Id);
+    Task<bool> Delete(int Id);
 }

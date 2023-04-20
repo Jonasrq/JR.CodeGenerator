@@ -39,21 +39,21 @@ public class $TableName$Services : I$TableName$Services
     /// Gets all.
     /// </summary>
     /// <returns></returns>
-    public async Task<ResponseHelper<List<$TableName$DTO>>> GetAll() => await Get$TableName$();
+    public async Task<List<$TableName$DTO>> GetAll() => await Get$TableName$();
 
     /// <summary>
     /// Gets the $TableName$ by identifier.
     /// </summary>
     /// <param name="Id">The identifier.</param>
     /// <returns></returns>
-    public async Task<ResponseHelper<$TableName$DTO>> Get$TableName$ById(int Id) => await Get$TableName$(Id);
+    public async Task<$TableName$DTO> Get$TableName$ById(int Id) => await Get$TableName$(Id);
 
     /// <summary>
     /// Saves the specified entity.
     /// </summary>
     /// <param name="entity">The entity.</param>
     /// <returns></returns>
-    public Task<ResponseHelper<PedidosDTO>> Save(PedidosDTO entity) => SaveEntity(entity);
+    public Task<PedidosDTO> Save(PedidosDTO entity) => SaveEntity(entity);
 
 
     /// <summary>
@@ -61,7 +61,7 @@ public class $TableName$Services : I$TableName$Services
     /// </summary>
     /// <param name="Id">The identifier.</param>
     /// <returns></returns>
-    public Task<ResponseHelper<bool>> Delete(int Id) => DeleteEntity(Id);
+    public Task<bool> Delete(int Id) => DeleteEntity(Id);
 
     #endregion
 
@@ -72,7 +72,7 @@ public class $TableName$Services : I$TableName$Services
     /// Gets $TableName$.
     /// </summary>
     /// <returns></returns>
-    private async Task<ResponseHelper<List<$TableName$DTO>>> Get$TableName$()
+    private async Task<List<$TableName$DTO>> Get$TableName$()
     {
         List<$TableName$DTO> result = new List<$TableName$DTO>();
         using (var db = new SqlConnection(_connection.GetConnectionString))
@@ -84,7 +84,7 @@ public class $TableName$Services : I$TableName$Services
 
             result = _mapper.Map<List<$TableName$DTO>>(users);
         }
-        return new ResponseHelper<List<$TableName$DTO>>(result);
+        return result;
     }
 
     /// <summary>
@@ -92,7 +92,7 @@ public class $TableName$Services : I$TableName$Services
     /// </summary>
     /// <param name="Id">The identifier.</param>
     /// <returns></returns>
-    private async Task<ResponseHelper<$TableName$DTO>> Get$TableName$(int Id)
+    private async Task<$TableName$DTO> Get$TableName$(int Id)
     {
         $TableName$DTO result = new $TableName$DTO();
         using (var db = new SqlConnection(_connection.GetConnectionString))
@@ -103,7 +103,7 @@ public class $TableName$Services : I$TableName$Services
             result = _mapper.Map<$TableName$DTO>($TableName$_Result);
 
         }
-        return new ResponseHelper<$TableName$DTO>(result);
+        return result;
     }
 
     /// <summary>
@@ -111,7 +111,7 @@ public class $TableName$Services : I$TableName$Services
     /// </summary>
     /// <param name="entityDTO">The entity.</param>
     /// <returns></returns>
-    private async Task<ResponseHelper<$TableName$DTO>> SaveEntity($TableName$DTO entityDTO)
+    private async Task<$TableName$DTO> SaveEntity($TableName$DTO entityDTO)
     {
        var entity = _mapper.Map<$TableName$>(entityDTO);
 
@@ -134,7 +134,7 @@ public class $TableName$Services : I$TableName$Services
             }
         }
         
-        return new ResponseHelper<$TableName$DTO>(entityDTO);
+        return entityDTO;
 
     }
 
@@ -144,7 +144,7 @@ public class $TableName$Services : I$TableName$Services
     /// <param name="Id">The identifier.</param>
     /// <returns></returns>
     /// <exception cref="ErrorValidations"></exception>
-    private async Task<ResponseHelper<bool>> DeleteEntity(int Id)
+    private async Task<bool> DeleteEntity(int Id)
     {
         bool result = false;
 
@@ -161,7 +161,7 @@ public class $TableName$Services : I$TableName$Services
             result = await servises.DeleteAsync(Id);
         }
 
-        return new ResponseHelper<bool>(result);
+        return result;
     }
 
     #endregion

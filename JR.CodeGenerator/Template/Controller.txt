@@ -43,12 +43,11 @@ public class $TableName$Controller : ControllerBase
     {
         try
         {
-            return await _service.GetAll();
+            return new ResponseHelper<UserSession>(await _service.GetAll());
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"{MethodBase.GetCurrentMethod().DeclaringType.Name}");
-            throw;
+           return ResultExceptions.GetResponseException<UserSession>(ex, entity, "");
         }
     }
 
@@ -63,12 +62,11 @@ public class $TableName$Controller : ControllerBase
     {
         try
         {
-            return await _service.Get$TableName$ById(Id);
+            return new ResponseHelper<UserSession>(await _service.Get$TableName$ById(Id));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"{MethodBase.GetCurrentMethod().DeclaringType.Name}");
-            throw;
+            return ResultExceptions.GetResponseException<UserSession>(ex, entity, Id);
         }
     }
 
@@ -83,12 +81,11 @@ public class $TableName$Controller : ControllerBase
     {
         try
         {
-            return await _service.Save(entity);
+            return new ResponseHelper<UserSession>(await _service.Save(entity));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"{MethodBase.GetCurrentMethod().DeclaringType.Name}");
-            throw;
+            return ResultExceptions.GetResponseException<UserSession>(ex, entity, _logger);
         }
     }    
 
@@ -103,12 +100,11 @@ public class $TableName$Controller : ControllerBase
     {
         try
         {
-            return await _service.Delete(Id);
+            return new ResponseHelper<UserSession>(await _service.Delete(Id));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"{MethodBase.GetCurrentMethod().DeclaringType.Name}");
-            throw;
+            return ResultExceptions.GetResponseException<UserSession>(ex, entity, Id);
         }
     }
 
