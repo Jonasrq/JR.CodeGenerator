@@ -47,7 +47,7 @@ public class $TableName$Controller : ControllerBase
         }
         catch (Exception ex)
         {
-           return ResultExceptions.GetResponseException<UserSession>(ex, entity, "");
+           return ResultExceptions.GetResponseException<UserSession>(ex, _logger);
         }
     }
 
@@ -66,7 +66,7 @@ public class $TableName$Controller : ControllerBase
         }
         catch (Exception ex)
         {
-            return ResultExceptions.GetResponseException<UserSession>(ex, entity, Id);
+            return ResultExceptions.GetResponseException<UserSession>(ex, _logger, Id);
         }
     }
 
@@ -85,7 +85,7 @@ public class $TableName$Controller : ControllerBase
         }
         catch (Exception ex)
         {
-            return ResultExceptions.GetResponseException<UserSession>(ex, entity, _logger);
+            return ResultExceptions.GetResponseException<UserSession>(ex, _logger, entity);
         }
     }    
 
@@ -104,7 +104,7 @@ public class $TableName$Controller : ControllerBase
         }
         catch (Exception ex)
         {
-            return ResultExceptions.GetResponseException<UserSession>(ex, entity, Id);
+            return ResultExceptions.GetResponseException<UserSession>(ex, _logger, Id);
         }
     }
 
